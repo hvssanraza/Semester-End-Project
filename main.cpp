@@ -260,6 +260,6 @@ void SnakeGame() {
         updateLogic();
         Sleep(100);
     }
-    cout << "Game Over!" << endl;
-   
+    cout << "Game Over!" << endl;
+   //talha
 }
