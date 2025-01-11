@@ -1,4 +1,6 @@
 #include <iostream>
+#include <conio.h>
+#include <windows.h>
 using namespace std;
 
 void SnakeGame();
@@ -26,7 +28,7 @@ int main() {
                TicTacToe();
                 break;
             case 2:
-               //  snakeGame();
+               SnakeGame();
                 break;
             case 3:
                //  hangman();
@@ -129,4 +131,135 @@ bool isFull(char board[3][3]) {
         }
     }
     return true;
+}
+
+const int WIDTH = 20;
+const int HEIGHT = 20;
+int headX, headY, fruitX, fruitY, score;
+int tailX[100], tailY[100], tailLength;
+bool isGameOver;
+enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
+Direction currentDirection;
+
+void initializeGame() {
+    isGameOver = false;
+    currentDirection = STOP;
+    headX = WIDTH / 2;
+    headY = HEIGHT / 2;
+    fruitX = rand() % WIDTH;
+    fruitY = rand() % HEIGHT;
+    score = 0;
+    tailLength = 0;
+
+}
+
+void render() {
+    system("cls");
+    for (int i = 0; i < WIDTH + 2; i++) cout << "#";
+    cout << endl;
+
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            if (j == 0) cout << "#";
+            if (i == headY && j == headX) cout << "O";
+            else if (i == fruitY && j == fruitX) cout << "F";
+            else {
+                bool tailFound = false;
+                for (int k = 0; k < tailLength; k++) {
+                    if (tailX[k] == j && tailY[k] == i) {
+                        cout << "o";
+                        tailFound = true;
+                    }
+                }
+                if (!tailFound) cout << " ";
+            }
+            if (j == WIDTH - 1) cout << "#";
+        }
+        cout << endl;
+    }
+
+    for (int i = 0; i < WIDTH + 2; i++) cout << "#";
+    cout << endl;
+    cout << "Score: " << score << endl;
+}
+
+void handleInput() {
+    if (_kbhit()) {
+        switch (_getch()) {
+        case 'a':
+            if (currentDirection != RIGHT) currentDirection = LEFT;
+            break;
+        case 'd':
+            if (currentDirection != LEFT) currentDirection = RIGHT;
+            break;
+        case 'w':
+            if (currentDirection != DOWN) currentDirection = UP;
+            break;
+        case 's':
+            if (currentDirection != UP) currentDirection = DOWN;
+            break;
+        case 'x':
+            isGameOver = true;
+            break;
+        }
+    }
+}
+
+void updateLogic() {
+    int prevX = tailX[0];
+    int prevY = tailY[0];
+    int prev2X, prev2Y;
+    tailX[0] = headX;
+    tailY[0] = headY;
+
+    for (int i = 1; i < tailLength; i++) {
+        prev2X = tailX[i];
+        prev2Y = tailY[i];
+        tailX[i] = prevX;
+        tailY[i] = prevY;
+        prevX = prev2X;
+        prevY = prev2Y;
+    }
+
+    switch (currentDirection) {
+    case LEFT:
+        headX--;
+        break;
+    case RIGHT:
+        headX++;
+        break;
+    case UP:
+        headY--;
+        break;
+    case DOWN:
+        headY++;
+        break;
+    default:
+        break;
+    }
+
+    if (headX >= WIDTH || headX < 0 || headY >= HEIGHT || headY < 0) isGameOver = true;
+
+    for (int i = 0; i < tailLength; i++) {
+        if (tailX[i] == headX && tailY[i] == headY) isGameOver = true;
+    }
+
+    if (headX == fruitX && headY == fruitY) {
+        score += 10;
+        fruitX = rand() % WIDTH;
+        fruitY = rand() % HEIGHT;
+        tailLength++;
+    }
+}
+
+void SnakeGame() {
+    initializeGame();
+    while (!isGameOver) {
+        render();
+        handleInput();
+        updateLogic();
+        Sleep(100);
+    }
+    cout << "Game Over!" << endl;
+   
 }
