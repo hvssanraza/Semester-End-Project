@@ -1,55 +1,141 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>   
+#include <ctime>
 #include <conio.h>
 #include <windows.h>
 using namespace std;
 
+void registerUser();
+bool loginUser();
+void displayLoginMenu();
+void displayMainMenu();
 void SnakeGame();
-void Minesweeper();
 void TicTacToe();
-
-void displayMenu() {
-   cout << "========================="<<endl;
-   cout<<"--Welcome to Console Based Gaming Suite--"<<endl;
-   cout << "========================="<<endl;
-   cout << "1. Tic-Tac-Toe"<<endl;
-   cout << "2. Snake Game"<<endl;
-   cout << "3. Hangman"<<endl;
-   cout << "0. Exit"<<endl;
-   cout << "Select a game to play: ";
-}
-
-int main() {
-    int choice;
-    do {
-        displayMenu();
-        cin >> choice;
-        switch (choice) {
-            case 1:
-               TicTacToe();
-                break;
-            case 2:
-               SnakeGame();
-                break;
-            case 3:
-               //  hangman();
-                break;
-            // Add cases for other games
-            case 0:
-                cout << "Exiting the game suite. Goodbye!"<<endl;
-                return 0;
-                break;
-            default:
-                cout << "Invalid choice. Please try again."<<endl;
-        }
-    } while (choice != 0);
-    return 0;
-}
-
-
-
 void displayBoard(char board[3][3]);
 bool checkWin(char board[3][3], char player);
 bool isFull(char board[3][3]);
+void Hangman(); 
+void NumberGuess();
+
+int main() {
+    srand(time(0));
+    int choice;
+    bool loggedIn = false;
+
+    do {
+        displayLoginMenu();
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                registerUser();
+                break;
+            case 2:
+                loggedIn = loginUser();
+                if (loggedIn) {
+                    cout << "Login successful! Welcome to the Gaming Suite!" << endl;
+                } else {
+                    cout << "Invalid credentials. Please try again." << endl;
+                }
+                break;
+            case 0:
+                cout << "Exiting... Goodbye!" << endl;
+                return 0;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (!loggedIn);
+
+    do {
+        displayMainMenu();
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                TicTacToe();
+                break;
+            case 2:
+                SnakeGame();
+                break;
+            case 3:
+                NumberGuess(); 
+                break;
+            case 0:
+                cout << "Exiting the game suite. Goodbye!" << endl;
+                return 0;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (choice != 0);
+
+    return 0;
+}
+
+void displayLoginMenu() {
+    cout << "===============================" << endl;
+    cout << "Welcome to Console Gaming Suite" << endl;
+    cout << "===============================" << endl;
+    cout << "1. Register" << endl;
+    cout << "2. Login" << endl;
+    cout << "0. Exit" << endl;
+    cout << "Enter your choice: ";
+}
+
+void displayMainMenu() {
+    cout << "=========================" << endl;
+    cout << "--Welcome to Console Based Gaming Suite--" << endl;
+    cout << "=========================" << endl;
+    cout << "1. Tic-Tac-Toe" << endl;
+    cout << "2. Snake Game" << endl;
+    cout << "3. Number Guessing Game" << endl;
+    cout << "3. Hangman" << endl;
+    cout << "0. Exit" << endl;
+    cout << "Select a game to play: ";
+}
+
+void registerUser() {
+    string username, password;
+    cout << "Register a new account" << endl;
+    cout << "Enter a username: ";
+    cin >> username;
+    cout << "Enter a password: ";
+    cin >> password;
+
+    ofstream outFile("users.txt", ios::app);
+    if (outFile.is_open()) {
+        outFile << username << " " << password << endl;
+        outFile.close();
+        cout << "Registration successful!" << endl;
+    } else {
+        cout << "Error: Unable to open file for writing." << endl;
+    }
+}
+
+bool loginUser() {
+    string username, password, storedUser, storedPass;
+    cout << "Login to your account" << endl;
+    cout << "Enter your username: ";
+    cin >> username;
+    cout << "Enter your password: ";
+    cin >> password;
+
+    ifstream inFile("users.txt");
+    if (inFile.is_open()) {
+        while (inFile >> storedUser >> storedPass) {
+            if (storedUser == username && storedPass == password) {
+                inFile.close();
+                return true;
+            }
+        }
+        inFile.close();
+    } else {
+        cout << "Error: Unable to open file for reading." << endl;
+    }
+
+    return false;
+}
 
 void TicTacToe() {
     char board[3][3] = { {'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'} };
@@ -108,7 +194,7 @@ void displayBoard(char board[3][3]) {
 
 bool checkWin(char board[3][3], char player) {
     for (int i = 0; i < 3; i++) {
-        if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) || 
+        if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) ||
             (board[0][i] == player && board[1][i] == player && board[2][i] == player)) {
             return true;
         }
@@ -150,7 +236,6 @@ void initializeGame() {
     fruitY = rand() % HEIGHT;
     score = 0;
     tailLength = 0;
-
 }
 
 void render() {
@@ -260,5 +345,32 @@ void SnakeGame() {
         updateLogic();
         Sleep(100);
     }
-    cout << "Game Over!"<<endl;
+    cout << "Game Over!" << endl;
+}
+
+void Hangman() {
+    cout << "Hangman is under development!" << endl;
+}
+
+void NumberGuess() {
+    cout << "Welcome to the Number Guessing Game!" << endl;
+    int guess;
+
+    while (true) {
+        int secretNumber = rand() % 20 + 1; 
+        cout << "Enter a random number (1-20) (-1 to Quit): ";
+        cin >> guess;
+
+        if (guess == -1) {
+            cout << "You chose to quit. Game Over!" << endl;
+            break;
+        }
+
+        if (guess == secretNumber) {
+            cout << "Congrats! You guessed the correct number: " << secretNumber << endl;
+            break;
+        } else {
+            cout << "Incorrect guess! The secret number was: " << secretNumber << endl;
+        }
+    }
 }
