@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <cstdlib>   
+#include <cstdlib>
 #include <ctime>
 #include <conio.h>
 #include <windows.h>
@@ -16,64 +16,73 @@ void TicTacToe();
 void displayBoard(char board[3][3]);
 bool checkWin(char board[3][3], char player);
 bool isFull(char board[3][3]);
-void Hangman(); 
+void Hangman();
 void NumberGuess();
 
-int main() {
+int main()
+{
     srand(time(0));
     int choice;
     bool loggedIn = false;
 
-    do {
+    do
+    {
         displayLoginMenu();
         cin >> choice;
 
-        switch (choice) {
-            case 1:
-                registerUser();
-                break;
-            case 2:
-                loggedIn = loginUser();
-                if (loggedIn) {
-                    cout << "Login successful! Welcome to the Gaming Suite!" << endl;
-                } else {
-                    cout << "Invalid credentials. Please try again." << endl;
-                }
-                break;
-            case 0:
-                cout << "Exiting... Goodbye!" << endl;
-                return 0;
-            default:
-                cout << "Invalid choice. Please try again." << endl;
+        switch (choice)
+        {
+        case 1:
+            registerUser();
+            break;
+        case 2:
+            loggedIn = loginUser();
+            if (loggedIn)
+            {
+                cout << "Login successful! Welcome to the Gaming Suite!" << endl;
+            }
+            else
+            {
+                cout << "Invalid credentials. Please try again." << endl;
+            }
+            break;
+        case 0:
+            cout << "Exiting... Goodbye!" << endl;
+            return 0;
+        default:
+            cout << "Invalid choice. Please try again." << endl;
         }
     } while (!loggedIn);
 
-    do {
+    do
+    {
         displayMainMenu();
         cin >> choice;
 
-        switch (choice) {
-            case 1:
-                TicTacToe();
-                break;
-            case 2:
-                SnakeGame();
-                break;
-            case 3:
-                NumberGuess(); 
-                break;
-            case 0:
-                cout << "Exiting the game suite. Goodbye!" << endl;
-                return 0;
-            default:
-                cout << "Invalid choice. Please try again." << endl;
+        switch (choice)
+        {
+        case 1:
+            TicTacToe();
+            break;
+        case 2:
+            SnakeGame();
+            break;
+        case 3:
+            NumberGuess();
+            break;
+        case 0:
+            cout << "Exiting the game suite. Goodbye!" << endl;
+            return 0;
+        default:
+            cout << "Invalid choice. Please try again." << endl;
         }
     } while (choice != 0);
 
     return 0;
 }
 
-void displayLoginMenu() {
+void displayLoginMenu()
+{
     cout << "===============================" << endl;
     cout << "Welcome to Console Gaming Suite" << endl;
     cout << "===============================" << endl;
@@ -83,19 +92,20 @@ void displayLoginMenu() {
     cout << "Enter your choice: ";
 }
 
-void displayMainMenu() {
+void displayMainMenu()
+{
     cout << "=========================" << endl;
     cout << "--Welcome to Console Based Gaming Suite--" << endl;
     cout << "=========================" << endl;
     cout << "1. Tic-Tac-Toe" << endl;
     cout << "2. Snake Game" << endl;
     cout << "3. Number Guessing Game" << endl;
-    cout << "3. Hangman" << endl;
     cout << "0. Exit" << endl;
     cout << "Select a game to play: ";
 }
 
-void registerUser() {
+void registerUser()
+{
     string username, password;
     cout << "Register a new account" << endl;
     cout << "Enter a username: ";
@@ -104,16 +114,20 @@ void registerUser() {
     cin >> password;
 
     ofstream outFile("users.txt", ios::app);
-    if (outFile.is_open()) {
+    if (outFile.is_open())
+    {
         outFile << username << " " << password << endl;
         outFile.close();
         cout << "Registration successful!" << endl;
-    } else {
+    }
+    else
+    {
         cout << "Error: Unable to open file for writing." << endl;
     }
 }
 
-bool loginUser() {
+bool loginUser()
+{
     string username, password, storedUser, storedPass;
     cout << "Login to your account" << endl;
     cout << "Enter your username: ";
@@ -122,23 +136,29 @@ bool loginUser() {
     cin >> password;
 
     ifstream inFile("users.txt");
-    if (inFile.is_open()) {
-        while (inFile >> storedUser >> storedPass) {
-            if (storedUser == username && storedPass == password) {
+    if (inFile.is_open())
+    {
+        while (inFile >> storedUser >> storedPass)
+        {
+            if (storedUser == username && storedPass == password)
+            {
                 inFile.close();
                 return true;
             }
         }
         inFile.close();
-    } else {
+    }
+    else
+    {
         cout << "Error: Unable to open file for reading." << endl;
     }
 
     return false;
 }
 
-void TicTacToe() {
-    char board[3][3] = { {'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'} };
+void TicTacToe()
+{
+    char board[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
     char currentPlayer = 'X';
     int move;
     bool gameWon = false;
@@ -146,11 +166,13 @@ void TicTacToe() {
     cout << "Welcome to Tic Tac Toe!" << endl;
     displayBoard(board);
 
-    while (!gameWon && !isFull(board)) {
+    while (!gameWon && !isFull(board))
+    {
         cout << "Player " << currentPlayer << ", enter your move (1-9): ";
         cin >> move;
 
-        if (move < 1 || move > 9) {
+        if (move < 1 || move > 9)
+        {
             cout << "Invalid move. Please try again." << endl;
             continue;
         }
@@ -158,7 +180,8 @@ void TicTacToe() {
         int row = (move - 1) / 3;
         int col = (move - 1) % 3;
 
-        if (board[row][col] == 'X' || board[row][col] == 'O') {
+        if (board[row][col] == 'X' || board[row][col] == 'O')
+        {
             cout << "Spot already taken. Please try again." << endl;
             continue;
         }
@@ -166,52 +189,69 @@ void TicTacToe() {
         board[row][col] = currentPlayer;
         displayBoard(board);
 
-        if (checkWin(board, currentPlayer)) {
+        if (checkWin(board, currentPlayer))
+        {
             cout << "Player " << currentPlayer << " wins!" << endl;
             gameWon = true;
-        } else {
+        }
+        else
+        {
             currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
         }
     }
 
-    if (!gameWon) {
+    if (!gameWon)
+    {
         cout << "It's a draw!" << endl;
     }
 }
 
-void displayBoard(char board[3][3]) {
+void displayBoard(char board[3][3])
+{
     cout << endl;
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
             cout << board[i][j];
-            if (j < 2) cout << " | ";
+            if (j < 2)
+                cout << " | ";
         }
         cout << endl;
-        if (i < 2) cout << "--+---+--" << endl;
+        if (i < 2)
+            cout << "--+---+--" << endl;
     }
     cout << endl;
 }
 
-bool checkWin(char board[3][3], char player) {
-    for (int i = 0; i < 3; i++) {
+bool checkWin(char board[3][3], char player)
+{
+    for (int i = 0; i < 3; i++)
+    {
         if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) ||
-            (board[0][i] == player && board[1][i] == player && board[2][i] == player)) {
+            (board[0][i] == player && board[1][i] == player && board[2][i] == player))
+        {
             return true;
         }
     }
 
     if ((board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
-        (board[0][2] == player && board[1][1] == player && board[2][0] == player)) {
+        (board[0][2] == player && board[1][1] == player && board[2][0] == player))
+    {
         return true;
     }
 
     return false;
 }
 
-bool isFull(char board[3][3]) {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if (board[i][j] != 'X' && board[i][j] != 'O') {
+bool isFull(char board[3][3])
+{
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (board[i][j] != 'X' && board[i][j] != 'O')
+            {
                 return false;
             }
         }
@@ -224,10 +264,18 @@ const int HEIGHT = 20;
 int headX, headY, fruitX, fruitY, score;
 int tailX[100], tailY[100], tailLength;
 bool isGameOver;
-enum Direction { STOP = 0, LEFT, RIGHT, UP, DOWN };
+enum Direction
+{
+    STOP = 0,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
 Direction currentDirection;
 
-void initializeGame() {
+void initializeGame()
+{
     isGameOver = false;
     currentDirection = STOP;
     headX = WIDTH / 2;
@@ -238,50 +286,70 @@ void initializeGame() {
     tailLength = 0;
 }
 
-void render() {
+void render()
+{
     system("cls");
-    for (int i = 0; i < WIDTH + 2; i++) cout << "#";
+    for (int i = 0; i < WIDTH + 2; i++)
+        cout << "#";
     cout << endl;
 
-    for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++) {
-            if (j == 0) cout << "#";
-            if (i == headY && j == headX) cout << "O";
-            else if (i == fruitY && j == fruitX) cout << "F";
-            else {
+    for (int i = 0; i < HEIGHT; i++)
+    {
+        for (int j = 0; j < WIDTH; j++)
+        {
+            if (j == 0)
+                cout << "#";
+            if (i == headY && j == headX)
+                cout << "O";
+            else if (i == fruitY && j == fruitX)
+                cout << "F";
+            else
+            {
                 bool tailFound = false;
-                for (int k = 0; k < tailLength; k++) {
-                    if (tailX[k] == j && tailY[k] == i) {
+                for (int k = 0; k < tailLength; k++)
+                {
+                    if (tailX[k] == j && tailY[k] == i)
+                    {
                         cout << "o";
                         tailFound = true;
                     }
                 }
-                if (!tailFound) cout << " ";
+                if (!tailFound)
+                    cout << " ";
             }
-            if (j == WIDTH - 1) cout << "#";
+            if (j == WIDTH - 1)
+                cout << "#";
         }
         cout << endl;
     }
 
-    for (int i = 0; i < WIDTH + 2; i++) cout << "#";
+    for (int i = 0; i < WIDTH + 2; i++)
+        cout << "#";
     cout << endl;
     cout << "Score: " << score << endl;
 }
 
-void handleInput() {
-    if (_kbhit()) {
-        switch (_getch()) {
+void handleInput()
+{
+    if (_kbhit())
+    {
+        switch (_getch())
+        {
         case 'a':
-            if (currentDirection != RIGHT) currentDirection = LEFT;
+            if (currentDirection != RIGHT)
+                currentDirection = LEFT;
             break;
         case 'd':
-            if (currentDirection != LEFT) currentDirection = RIGHT;
+            if (currentDirection != LEFT)
+                currentDirection = RIGHT;
             break;
         case 'w':
-            if (currentDirection != DOWN) currentDirection = UP;
+            if (currentDirection != DOWN)
+                currentDirection = UP;
             break;
         case 's':
-            if (currentDirection != UP) currentDirection = DOWN;
+            if (currentDirection != UP)
+                currentDirection = DOWN;
             break;
         case 'x':
             isGameOver = true;
@@ -290,14 +358,16 @@ void handleInput() {
     }
 }
 
-void updateLogic() {
+void updateLogic()
+{
     int prevX = tailX[0];
     int prevY = tailY[0];
     int prev2X, prev2Y;
     tailX[0] = headX;
     tailY[0] = headY;
 
-    for (int i = 1; i < tailLength; i++) {
+    for (int i = 1; i < tailLength; i++)
+    {
         prev2X = tailX[i];
         prev2Y = tailY[i];
         tailX[i] = prevX;
@@ -306,7 +376,8 @@ void updateLogic() {
         prevY = prev2Y;
     }
 
-    switch (currentDirection) {
+    switch (currentDirection)
+    {
     case LEFT:
         headX--;
         break;
@@ -323,13 +394,17 @@ void updateLogic() {
         break;
     }
 
-    if (headX >= WIDTH || headX < 0 || headY >= HEIGHT || headY < 0) isGameOver = true;
+    if (headX >= WIDTH || headX < 0 || headY >= HEIGHT || headY < 0)
+        isGameOver = true;
 
-    for (int i = 0; i < tailLength; i++) {
-        if (tailX[i] == headX && tailY[i] == headY) isGameOver = true;
+    for (int i = 0; i < tailLength; i++)
+    {
+        if (tailX[i] == headX && tailY[i] == headY)
+            isGameOver = true;
     }
 
-    if (headX == fruitX && headY == fruitY) {
+    if (headX == fruitX && headY == fruitY)
+    {
         score += 10;
         fruitX = rand() % WIDTH;
         fruitY = rand() % HEIGHT;
@@ -337,9 +412,11 @@ void updateLogic() {
     }
 }
 
-void SnakeGame() {
+void SnakeGame()
+{
     initializeGame();
-    while (!isGameOver) {
+    while (!isGameOver)
+    {
         render();
         handleInput();
         updateLogic();
@@ -348,28 +425,30 @@ void SnakeGame() {
     cout << "Game Over!" << endl;
 }
 
-void Hangman() {
-    cout << "Hangman is under development!" << endl;
-}
-
-void NumberGuess() {
+void NumberGuess()
+{
     cout << "Welcome to the Number Guessing Game!" << endl;
     int guess;
 
-    while (true) {
-        int secretNumber = rand() % 20 + 1; 
+    while (true)
+    {
+        int secretNumber = rand() % 20 + 1;
         cout << "Enter a random number (1-20) (-1 to Quit): ";
         cin >> guess;
 
-        if (guess == -1) {
+        if (guess == -1)
+        {
             cout << "You chose to quit. Game Over!" << endl;
             break;
         }
 
-        if (guess == secretNumber) {
+        if (guess == secretNumber)
+        {
             cout << "Congrats! You guessed the correct number: " << secretNumber << endl;
             break;
-        } else {
+        }
+        else
+        {
             cout << "Incorrect guess! The secret number was: " << secretNumber << endl;
         }
     }
