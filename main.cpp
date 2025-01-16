@@ -289,7 +289,7 @@ void initializeGame()
 void render()
 {
     system("cls");
-    for (int i = 0; i < WIDTH + 2; i++)
+    for (int i = 0; i < WIDTH + 2; i++) //for the Top.Bord
         cout << "#";
     cout << endl;
 
@@ -376,7 +376,7 @@ void updateLogic()
         prevY = prev2Y;
     }
 
-    switch (currentDirection)
+    switch (currentDirection) //axis
     {
     case LEFT:
         headX--;
@@ -394,16 +394,16 @@ void updateLogic()
         break;
     }
 
-    if (headX >= WIDTH || headX < 0 || headY >= HEIGHT || headY < 0)
+    if (headX >= WIDTH || headX < 0 || headY >= HEIGHT || headY < 0) //bord.col
         isGameOver = true;
 
-    for (int i = 0; i < tailLength; i++)
+    for (int i = 0; i < tailLength; i++) //tail col.
     {
         if (tailX[i] == headX && tailY[i] == headY)
             isGameOver = true;
     }
 
-    if (headX == fruitX && headY == fruitY)
+    if (headX == fruitX && headY == fruitY) //f.col
     {
         score += 10;
         fruitX = rand() % WIDTH;
